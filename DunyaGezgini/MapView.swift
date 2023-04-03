@@ -1,0 +1,52 @@
+//
+//  MapView.swift
+//  DunyaGezgini
+//
+//  Created by Beyza Sude Erol on 3.04.2023.
+//
+
+import SwiftUI
+import MapKit
+
+struct MapView: View {
+    
+    static var regions: [MKCoordinateRegion] = [
+        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 41.0,longitude: 29.0),
+                           span: MKCoordinateSpan(latitudeDelta: 4.0, longitudeDelta: 4.0)),
+        
+        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092),
+                           span: MKCoordinateSpan(latitudeDelta: 4.0, longitudeDelta: 4.0))
+         
+    
+    ]
+    
+    @State var region: MKCoordinateRegion = regions[0]
+    
+    @State var selectedIndex = 0
+    
+    var body: some View {
+        Map(coordinateRegion: $region)
+            .edgesIgnoringSafeArea(.top)
+            .overlay(
+                VStack{
+                    Picker("Picker", selection: $selectedIndex, content: {
+                        Text("MAP_CITY_ISTANBUL").tag(0)
+                        Text("MAP_CITY_LONDON").tag(1)
+                    })
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    .onChange(of: selectedIndex) { newValue in
+                        self.region = MapView.regions[selectedIndex]
+                    }
+                    Spacer()
+                }
+                
+            )
+    }
+}
+
+struct MapView_Previews: PreviewProvider {
+    static var previews: some View {
+        MapView()
+    }
+}
